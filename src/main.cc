@@ -32,6 +32,12 @@
     int stat_proiettili = 0;
     int stat_particle = 0;
 
+
+/**
+	Space Shooter
+	Just a simple game of a goemetric based space shooter
+*/
+
 int main() 
 {
 
