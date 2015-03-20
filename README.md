@@ -6,7 +6,7 @@ Just a simple game of a goemetric based space shooter.
 allegro5 game library
 
 ##### Compile and run:
-Linux:<br>
+Linux:
 ```bash
 mkdir build ; cd build
 cmake ..
