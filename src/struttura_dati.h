@@ -44,7 +44,7 @@ struct navicella {
     float x1,y1, x2,y2, x3,y3;
     float xvel, yvel;
     
-    int vita = 100;
+    float vita;
         
     float tsparo, tsparo_max;
     proiettile *testa;  

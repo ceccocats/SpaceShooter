@@ -16,6 +16,7 @@
 
     
     bool tasto[ntasti];
+    bool game=true;
 
     ALLEGRO_DISPLAY *display = NULL;
     ALLEGRO_EVENT_QUEUE *event_queue = NULL;
@@ -31,6 +32,9 @@
     
     int stat_proiettili = 0;
     int stat_particle = 0;
+    
+    int score=0;
+
 
 
 /**
@@ -56,7 +60,7 @@ int main()
     navicella player;
     inizializza_player(player);
  
-
+    float trasp_score = 1.0f;
 
     while (!done) {
         ALLEGRO_EVENT ev;
@@ -73,21 +77,40 @@ int main()
 
         else if (ev.type == ALLEGRO_EVENT_TIMER) {
             //update
-            al_get_mouse_state(&mouse);
+            if(game) {
+                al_get_mouse_state(&mouse);
 
-            muovi_player(player, mouse.x, mouse.y);
-            calcola_punti_triangolo(player);
-
-            gestisci_sparo(player);
-
-            p_emit = muovi_particle(p_emit);
+                muovi_player(player, mouse.x, mouse.y);
+                calcola_punti_triangolo(player);  
+                emetti_nemici(player);
+                gestisci_sparo(player);
+            }
             
-            emetti_nemici(player);
-            
+            muovi_proiettili(player);
             muovi_nemici();
+            p_emit = muovi_particle(p_emit);
 
-        
-
+            if(!game) {
+                if(player.vita >= 100) {
+                    player.vita=100;
+                    
+                    if(trasp_score <1)
+                        trasp_score += 0.01f;
+                    else {
+                        trasp_score=1;
+                        score=0;
+                        elimina_nemici_tutti();
+                        inizializza_player(player);
+                        game=true;
+                    }
+                } else {
+                    player.vita += 0.2;
+                    trasp_score >= 0 ? trasp_score -= 0.01f : trasp_score =0;
+                }
+            }
+            
+            
+            
             redraw = true;
         }
 
@@ -95,41 +118,29 @@ int main()
             //draw
 
             disegna_particle(p_emit, player.l / 2);
-
             disegna_proiettili(player.testa, player.l);
-
             disegna_nemici(nemici);
                     
             disegna_bordi();
 
-            disegna_player(player);
+            if(game)
+                disegna_player(player);
             
-            scrivi_testo("vita", 220, 35, 20, colore[ROSSO]);
-            disegna_vita(player.vita,290,35, 20);
-            
-            static char str_proi[5];
-            static char str_part[5];
-            int_to_string(stat_proiettili, str_proi, 4);
-            int_to_string(stat_particle, str_part, 4);
-            
-            static ALLEGRO_COLOR col_sem = colore[VERDE];
-            
-            if(stat_particle <=2000) 
-                col_sem.r = stat_particle / 2000.0;
-            
-            if(stat_particle >2000 && stat_particle<3000) 
-                col_sem.g =1.0 - (stat_particle-2000) / 1000.0;
-                
-             if(stat_particle >=3000) 
-                col_sem =al_map_rgba_f(1.0,0.0,0.0,1.0);           
             
             scrivi_testo("shooter v1", 25, 35, 20, colore[ROSSO]);
+            scrivi_testo("vita", 220, 35, 20, colore[ROSSO]);
+            disegna_vita(player.vita,290,35, 20);       
+                                
+            static char str_score[9];
+            int_to_string(score, str_score, 8);
+            
+            scrivi_testo("score", 725, 35, 20, colore[ROSSO]);
+            scrivi_testo(str_score, 860, 35, 20, colore[ROSSO]);
 
-            scrivi_testo("proiettili sparati", 725, 20, 12, colore[ROSSO]);
-            scrivi_testo("particle in rendering", 725, 40, 12, colore[ROSSO]);
-            scrivi_testo(str_proi, 940, 20, 12, colore[VERDE]);
-            scrivi_testo(str_part, 940, 40, 12, col_sem);
-
+            if(!game)
+               scrivi_testo(str_score, 210, 450, 100, trasp(colore[VERDE], 1.0f -trasp_score));
+            
+            
             al_flip_display();
             al_clear_to_color(al_map_rgb(0, 0, 0));
             

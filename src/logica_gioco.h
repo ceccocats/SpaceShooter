@@ -1,4 +1,5 @@
 void inizializza_player(navicella &pl);
+static void esp_iniz_player(navicella &pl);
 
 void muovi_player(navicella &pl, int mousex, int mousey);
 
@@ -14,3 +15,5 @@ particle *emetti_particle_esp(  particle *p_emit, float x, float y, int numero,
                             ALLEGRO_COLOR colore  );
 
 particle *muovi_particle(particle *p_emit);
+
+void muovi_proiettili(navicella &pl);

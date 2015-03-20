@@ -21,6 +21,9 @@
 
     extern int stat_proiettili;
     extern int stat_particle;
+    
+    extern int score;
+    extern bool game;
 
 
 void inizializza_player(navicella &pl)
@@ -36,7 +39,10 @@ void inizializza_player(navicella &pl)
     pl.tsparo=0;
     pl.tsparo_max= 7;
     pl.testa = NULL;
+    
+    pl.vita = 100;
 
+    esp_iniz_player(pl);
 }
 
 void muovi_player(navicella &pl, int mousex, int mousey)
@@ -149,9 +155,23 @@ void muovi_player(navicella &pl, int mousex, int mousey)
             return;
     }
     
-   
+    
+    if(pl.vita <= 0) {
+        game = false;
+        esp_iniz_player(pl);
+    }
     
 }
+
+static void esp_iniz_player(navicella &pl) {
+    p_emit = emetti_particle_esp(p_emit, pl.x, pl.y, 15, 
+                         5, 0, M_PI*2, 60, colore[GIALLO] );
+    p_emit = emetti_particle_esp(p_emit, pl.x, pl.y, 15, 
+                         5, 0, M_PI*2, 60, colore[ROSSO] );
+    p_emit = emetti_particle_esp(p_emit, pl.x, pl.y, 15, 
+                         5, 0, M_PI*2, 60, colore[BLU] );
+}
+
 
 void calcola_punti_triangolo(navicella &pl)
 {
@@ -200,7 +220,7 @@ static particle *distruggi_particle(particle *p_emit, particle *p, particle *pre
     return p_emit;
 }
 
-static void muovi_proiettili(navicella &pl)
+void muovi_proiettili(navicella &pl)
 {
     proiettile *p = pl.testa;
     proiettile *prec = NULL;
@@ -282,6 +302,7 @@ static void muovi_proiettili(navicella &pl)
         
         if(colli != NULL) {
             colli->da_eliminare= true;
+            score += (colli->l-5)*4 + (colli->danno-5)*4;
         }
        
         
@@ -320,9 +341,6 @@ void gestisci_sparo(navicella &pl)
     }
 
     tsparo++;
-
-
-    muovi_proiettili(pl);
 }
 
 

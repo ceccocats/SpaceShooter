@@ -267,3 +267,14 @@ nemico *collisone_nemico(int x, int y)
     
     return NULL;
 }
+
+
+void elimina_nemici_tutti() {
+    
+    nemico *p = nemici;
+
+    while(p != NULL) {
+        p->da_eliminare = true;
+        p = p->succ;
+    }
+}
