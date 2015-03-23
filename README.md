@@ -1,6 +1,6 @@
 # SpaceShooter
 
-Just a simple game of a goemetric based space shooter.
+Just a simple game of a geometric based space shooter.
 
 ##### Dependencies:
 allegro5 game library
