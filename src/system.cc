@@ -106,6 +106,8 @@ void aggiorna_tasti(ALLEGRO_EVENT &ev, bool tasto[], bool set)
 
 ALLEGRO_COLOR trasp( ALLEGRO_COLOR c, float alpha)
 {
+    if(alpha <0)
+        alpha=0;
 
     c.r *= alpha;
     c.g *= alpha;
