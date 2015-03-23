@@ -109,6 +109,9 @@ ALLEGRO_COLOR trasp( ALLEGRO_COLOR c, float alpha)
     if(alpha <0)
         alpha=0;
 
+    if(alpha >1)
+        alpha=1;
+
     c.r *= alpha;
     c.g *= alpha;
     c.b *= alpha;
