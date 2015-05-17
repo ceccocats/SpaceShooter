@@ -14,5 +14,4 @@ make
 ./Shooter
 ```
 
-Compiled game for lazy Windows users: <br>
-https://www.dropbox.com/s/yfka8bw4t87tr59/SpaceShooter.zip?dl=0
+Check releases for compiled Windows game.
